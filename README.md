@@ -1,6 +1,7 @@
 # NgDeckgl
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
+Click here for [ONLINE DEMO](http://162.212.157.167:4200)
+
 
 ## Development server
 
