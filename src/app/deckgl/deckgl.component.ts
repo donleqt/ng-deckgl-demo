@@ -65,28 +65,27 @@ export class DeckglComponent implements AfterViewInit {
   }
 
   updateLayers = () => {
-    this.ngZone.runOutsideAngular(() => {
-      this.deckgl.setProps({
-        layers: this.getLayers(),
-        width: this.getViewportSize().width,
-        height: this.getViewportSize().height,
-      });
+    this.deckgl.setProps({
+      layers: this.getLayers(),
+      width: this.getViewportSize().width,
+      height: this.getViewportSize().height,
     });
   }
 
   onViewportChange = (viewport) => {
-    this.viewport = viewport;
-    this.controller.setProps(viewport);
-    this.deckgl.setProps(viewport);
-    this.updateLayers();
     this.ngZone.runOutsideAngular(() => {
+      this.viewport = viewport;
+      this.controller.setProps(viewport);
+      this.deckgl.setProps(viewport);
+      this.updateLayers();
       this.viewPortChange.emit(viewport);
     });
   }
 
   public updateSize(data) {
-    const size = {...this.getViewportSize()};
-    this.controller.setProps({...size});
-    this.deckgl.setProps({...size});
+    this.ngZone.runOutsideAngular(() => {
+      this.controller.setProps(this.getViewportSize());
+      this.updateLayers();
+    });
   }
 }
