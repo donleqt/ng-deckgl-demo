@@ -26,8 +26,9 @@ const clusteredPoints = new SuperCluster({
   radius: 50
 }).load(points);
 
-export {clusteredPoints};
-
 function rangeRandom(min, max) {
   return Math.random() * (max - min) + min;
 }
+
+export {clusteredPoints};
+

@@ -1,6 +1,6 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {clusteredPoints} from './inc/sample-data';
-import {createMarker, Map} from './inc/mapbox-gl';
+import {createMarker, Map, NavigationControl} from './inc/mapbox-gl';
 
 @Component({
   selector: 'app-mapbox',
@@ -26,6 +26,9 @@ export class MapboxComponent implements AfterViewInit {
       maxZoom: 16,
       zoom: 10
     });
+    this._map.addControl(new NavigationControl({
+      showCompass: false
+    }), 'top-left');
     ['load', 'zoomend', 'resize', 'dragend'].map(event => {
       this._map.on(event, this.onMapChanged);
     });

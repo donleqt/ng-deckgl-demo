@@ -1,7 +1,5 @@
 import * as kdbush from 'kdbush';
 
-export {SuperCluster};
-
 class SuperCluster {
   options = {
     minZoom: 0,   // min zoom to generate clusters on
@@ -374,3 +372,6 @@ function getX(p) {
 function getY(p) {
   return p.y;
 }
+
+export {SuperCluster};
+

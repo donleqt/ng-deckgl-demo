@@ -1,9 +1,7 @@
 import {MapboxConfig} from './mapbox-config';
 import * as MapboxGL from 'mapbox-gl/dist/mapbox-gl.js';
 MapboxGL.accessToken = MapboxConfig.accessToken;
-const {Map, Marker} = MapboxGL;
-
-export {Map, createMarker};
+const {Map, Marker, NavigationControl} = MapboxGL;
 
 function createMarker(point) {
   let icon = null;
@@ -22,3 +20,5 @@ function makeClusterIcon(property) {
   span.innerText = property.pointCountBeauty;
   return span;
 }
+
+export {Map, createMarker, NavigationControl};
