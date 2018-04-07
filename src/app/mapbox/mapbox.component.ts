@@ -1,6 +1,5 @@
-import {AfterViewInit, Component} from '@angular/core';
-import {clusteredPoints} from './inc/sample-data';
-import {createMarker, Map, NavigationControl} from './inc/mapbox-gl';
+import {AfterViewInit, Component, EventEmitter, Input, NgZone, OnChanges, Output} from '@angular/core';
+import {Map, NavigationControl} from './inc/mapbox-gl';
 
 @Component({
   selector: 'app-mapbox',
@@ -9,44 +8,65 @@ import {createMarker, Map, NavigationControl} from './inc/mapbox-gl';
     './mapbox.component.css'
   ]
 })
-export class MapboxComponent implements AfterViewInit {
+export class MapboxComponent implements AfterViewInit, OnChanges {
   private _map = null;
+  @Input() viewport;
+  @Output() mapResize = new EventEmitter();
 
-  private _inBoundMarkers = [];
+  constructor(public ngZone: NgZone) {
+  }
 
-  constructor() {
-    this.onMapChanged = this.onMapChanged.bind(this);
+  ngOnChanges(changes) {
+    if (this._map && changes.viewport) {
+      this._map.flyTo(this.convertViewportData());
+    }
   }
 
   initMap() {
-    this._map = new Map({
-      container: 'mapContainer',
-      style: 'mapbox://styles/mapbox/streets-v9',
-      center: [106.660172, 10.762622],
-      maxZoom: 16,
-      zoom: 10
-    });
-    this._map.addControl(new NavigationControl({
-      showCompass: false
-    }), 'top-left');
-    ['load', 'zoomend', 'resize', 'dragend'].map(event => {
-      this._map.on(event, this.onMapChanged);
+    this.ngZone.runOutsideAngular(() => {
+      requestAnimationFrame(() => {
+        this._map = new Map({
+          container: 'mapContainer',
+          style: 'mapbox://styles/mapbox/dark-v9',
+          ...this.convertViewportData()
+        });
+        this._map.addControl(new NavigationControl({
+          showCompass: false
+        }), 'top-left');
+        this._map.on('resize', this.onResize);
+      });
     });
   }
 
-  /**
-   * Handle map change event, remap markers
-   */
-  onMapChanged() {
-    const {_sw, _ne} = this._map.getBounds();
-    this._inBoundMarkers.map(e => {
-      e.remove();
-    });
-    const points = clusteredPoints.getClusters([_sw.lng, _sw.lat, _ne.lng, _ne.lat], Math.floor(this._map.getZoom()));
-    this._inBoundMarkers = points.map(createMarker).map(e => {
-      e.addTo(this._map);
-      return e;
-    });
+  onResize = () => {
+    if (this._map) {
+      const c = this._map.getCanvas();
+      this.mapResize.emit({
+        height: c.height,
+        width: c.width
+      });
+    }
+  }
+
+  convertViewportData() {
+    const {
+      zoom,
+      bearing,
+      pitch,
+      longitude,
+      latitude,
+      maxZoom,
+      minZoom,
+    } = this.viewport;
+    return {
+      duration: 0,
+      bearing,
+      pitch,
+      zoom,
+      maxZoom,
+      minZoom,
+      center: [longitude, latitude]
+    };
   }
 
   ngAfterViewInit() {

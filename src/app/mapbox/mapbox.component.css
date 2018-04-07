@@ -1,3 +1,8 @@
 #mapContainer {
+  height: 100%;
+}
+
+.map-box {
   height: 100vh;
+  position: relative;
 }

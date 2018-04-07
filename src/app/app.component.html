@@ -1,2 +1,12 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<app-mapbox></app-mapbox>
+<app-mapbox
+  [viewport]="viewPortData"
+  (mapResize)="onMapResize($event)"
+>
+  <app-deckgl
+    [viewport]="viewPortData"
+    [data]="sourceData"
+    (viewPortChange)="onViewportChange($event)"
+    (mounted) = "onViewportMounted($event)"
+  ></app-deckgl>
+</app-mapbox>

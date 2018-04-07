@@ -4,12 +4,14 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { MapboxComponent } from './mapbox/mapbox.component';
+import { DeckglComponent } from './deckgl/deckgl.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    MapboxComponent
+    MapboxComponent,
+    DeckglComponent
   ],
   imports: [
     BrowserModule
