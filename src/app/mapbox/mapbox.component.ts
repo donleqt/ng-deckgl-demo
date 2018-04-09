@@ -30,9 +30,6 @@ export class MapboxComponent implements AfterViewInit, OnChanges {
           style: 'mapbox://styles/mapbox/dark-v9',
           ...this.convertViewportData()
         });
-        this._map.addControl(new NavigationControl({
-          showCompass: false
-        }), 'top-left');
         this._map.on('resize', this.onResize);
       });
     });
